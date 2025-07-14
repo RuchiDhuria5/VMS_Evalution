@@ -255,7 +255,7 @@ export default function SupplierEvaluationForm() {
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
                 onClick={() => saveSignature(preparedCanvasRef, setPreparedSignature)}
               >
-                Save Signature
+                Save 
               </button>
               <button
                 type="button"
@@ -288,7 +288,7 @@ export default function SupplierEvaluationForm() {
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
                 onClick={() => saveSignature(approvedCanvasRef, setApprovedSignature)}
               >
-                Save Signature
+                Save 
               </button>
               <button
                 type="button"
