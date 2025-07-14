@@ -138,7 +138,7 @@ export default function SupplierEvaluationForm() {
               </div>
               <div>
                 <label className="block font-medium mb-1">Quantity Supplied</label>
-                <input type="text" placeholder="Enter Quantity Supplied" className="w-full p-2Соответствие border rounded-md" />
+                <input type="text" placeholder="Enter Quantity Supplied" className="w-full p-2 border rounded-md" />
               </div>
             </div>
           </form>
@@ -146,7 +146,6 @@ export default function SupplierEvaluationForm() {
 
         {/* Summary Table */}
         <div className="overflow-x-auto mb-8">
-          <h2 className="text-xl font-bold text-blue-800 mb-3">Summary</h2>
           <table className="w-full text-sm border border-gray-300">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
@@ -189,7 +188,6 @@ export default function SupplierEvaluationForm() {
 
         {/* Evaluation Table */}
         <div className="overflow-x-auto mb-10">
-          <h2 className="text-xl font-bold text-blue-800 mb-3">Evaluation Table</h2>
           <table className="w-full text-sm border border-gray-300 text-center">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
