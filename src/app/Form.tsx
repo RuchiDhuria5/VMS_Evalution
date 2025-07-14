@@ -31,7 +31,7 @@ export default function SupplierEvaluationForm() {
     "Quality System of Supplier",
     "Delivery Performance",
     "Price",
-    "Quantity Commitment",
+    "Quantity Commitment ",
   ];
 
   return (
