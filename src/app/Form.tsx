@@ -186,8 +186,6 @@ export default function SupplierEvaluationForm() {
             <input type="date" className="w-full p-2 border rounded-md" />
         </div>
         </div>
-
-
       </div>
     </div>
   );
