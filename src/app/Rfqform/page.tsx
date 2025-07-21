@@ -71,8 +71,8 @@ const Textarea = ({
 const QuotationPage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileList, setFileList] = useState<File[]>([]);
-  const [warningMessage, setWarningMessage] = useState<string>("");
-  const [vendorWarning, setVendorWarning] = useState<string>("");
+  const [warningMessage, setWarningMessage] = useState("");
+  const [vendorWarning, setVendorWarning] = useState("");
 
   const [vendorList, setVendorList] = useState<any[]>([]);
   const [vendorForm, setVendorForm] = useState({
@@ -92,13 +92,13 @@ const QuotationPage = () => {
 
   const handleAddFile = () => {
     if (!selectedFile) {
-      setWarningMessage("No file chosen. Please select a file before zooming Add.");
+      setWarningMessage("No file chosen. Please select a file before clicking Add.");
       return;
     }
     setFileList((prev) => [...prev, selectedFile]);
     setSelectedFile(null);
     setWarningMessage("");
-    const input: Input = document.getElementById("fileInput") as HTMLInputElement;
+    const input = document.getElementById("fileInput") as HTMLInputElement;
     if (input) input.value = "";
   };
 
@@ -145,12 +145,8 @@ const QuotationPage = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <h2 className="text-2xl font-bold text-gray-800">RFQ Data</h2>
           <div className="flex gap-3">
-            <button className="bg-blue-500 text-white px-7 py-3 rounded-full hover:bg-blue-600 transition">
-              Download PDF
-            </button>
-            <button className="border border-blue-500 px-7 py-3 rounded-full hover:bg-blue-100 transition">
-              Back
-            </button>
+            <button className="bg-blue-500 text-white px-7 py-3 rounded-full hover:bg-blue-600 transition">Download PDF</button>
+            <button className="border border-blue-500 px-7 py-3 rounded-full hover:bg-blue-100 transition">Back</button>
           </div>
         </div>
 
@@ -166,7 +162,7 @@ const QuotationPage = () => {
 
         <hr className="border-t border-blue-500" />
 
-        {/* Logistic Details */}
+        {/* RFQ Details */}
         <div>
           <h3 className="text-xl font-semibold text-gray-800 mb-4">RFQ Details</h3>
           <div className="border border-gray-300 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -193,31 +189,10 @@ const QuotationPage = () => {
           <h3 className="text-xl font-semibold text-gray-800 mb-4">Vendor Details</h3>
           <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <Textarea 
-                label="Material Desc" 
-                placeholder="Enter material description" 
-                value={vendorForm.materialDesc} 
-                onChange={(e) => handleVendorChange("materialDesc", e.target.value)} 
-              />
-              <Input 
-                label="Lead Time" 
-                placeholder="Enter lead time" 
-                value={vendorForm.leadTime} 
-                onChange={(e) => handleVendorChange("leadTime", e.target.value)} 
-              />
-              <Input 
-                label="Delivery" 
-                placeholder="Select delivery date" 
-                type="date"
-                value={vendorForm.delivery} 
-                onChange={(e) => handleVendorChange("delivery", e.target.value)} 
-              />
-              <Input 
-                label="Rate" 
-                placeholder="Enter rate" 
-                value={vendorForm.Rate} 
-                onChange={(e) => handleVendorChange("Rate", e.target.value)} 
-              />
+              <Textarea label="Material Desc" placeholder="Enter material description" value={vendorForm.materialDesc} onChange={(e) => handleVendorChange("materialDesc", e.target.value)} />
+              <Input label="Lead Time" placeholder="Enter lead time" value={vendorForm.leadTime} onChange={(e) => handleVendorChange("leadTime", e.target.value)} />
+              <Input label="Delivery" type="date" placeholder="Select delivery date" value={vendorForm.delivery} onChange={(e) => handleVendorChange("delivery", e.target.value)} />
+              <Input label="Rate" placeholder="Enter rate" value={vendorForm.Rate} onChange={(e) => handleVendorChange("Rate", e.target.value)} />
             </div>
             <button onClick={addVendor} className="bg-blue-500 text-white px-6 py-2 rounded-2xl hover:bg-blue-600">Add</button>
             {vendorWarning && <p className="text-red-600 text-sm">{vendorWarning}</p>}
@@ -261,60 +236,32 @@ const QuotationPage = () => {
 
         {/* Payment Section */}
         <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
-          <div>
-            <label htmlFor="payterms">Payterms</label>
-            <input type="text" className="border border-gray-300 w-full py-3 rounded-2xl hover:border-blue-500 focus:border-blue-500" />
+          <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="payterms" className="text-sm font-medium text-gray-700">Payterms</label>
+            <input type="text" id="payterms" name="payterms" placeholder="Enter pay terms" className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition" />
           </div>
           <div className="flex items-center gap-4">
-            <input 
-              type="radio" 
-              id="negotiable" 
-              name="paymentTerms" 
-              className="text-blue-500 focus:ring-blue-500 accent-blue-500" 
-            />
+            <input type="radio" id="negotiable" name="paymentTerms" className="accent-blue-500" />
             <label htmlFor="negotiable">Negotiable</label>
-            <input 
-              type="radio" 
-              id="non-negotiable" 
-              name="paymentTerms" 
-              className="text-blue-500 focus:ring-blue-500 accent-blue-500" 
-            />
+            <input type="radio" id="non-negotiable" name="paymentTerms" className="accent-blue-500" />
             <label htmlFor="non-negotiable">Non-Negotiable</label>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="validityStart">Validity Start</label>
-              <input type="date" id="validityStart" className="w-full border border-gray-300 p-2 rounded-xl hover:border-blue-500 focus:border-blue-600" />
-            </div>
-            <div>
-              <label htmlFor="validityEnd">Validity End</label>
-              <input type="date" id="validityEnd" className="w-full border border-gray-300 p-2 rounded-xl hover:border-blue-500 focus:border-blue-600" />
-            </div>
+            <Input label="Validity Start" type="date" placeholder="" />
+            <Input label="Validity End" type="date" placeholder="" />
           </div>
         </div>
 
         <hr className="border-t border-blue-500" />
 
-        {/* Attachment Upload */}
+        {/* File Upload Section */}
         <div className="space-y-4 border border-gray-300 p-6 rounded-2xl">
           <h3 className="text-xl font-semibold text-gray-800">Attachment Upload</h3>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <input
-              id="fileInput"
-              type="file"
-              onChange={handleFileChange}
-              className="block text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
-            />
-            <button
-              onClick={handleAddFile}
-              className="bg-blue-500 text-white px-5 py-2 rounded-full hover:bg-blue-600 transition"
-            >
-              Add
-            </button>
+            <input id="fileInput" type="file" onChange={handleFileChange} className="block text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200" />
+            <button onClick={handleAddFile} className="bg-blue-500 text-white px-5 py-2 rounded-full hover:bg-blue-600 transition">Add</button>
           </div>
-
           {warningMessage && <p className="text-red-600 text-sm">{warningMessage}</p>}
-
           {fileList.length > 0 && (
             <div className="overflow-x-auto">
               <table className="min-w-full mt-4 border border-gray-300 text-sm">
@@ -332,21 +279,12 @@ const QuotationPage = () => {
                       <td className="px-4 py-2">{index + 1}</td>
                       <td className="px-4 py-2">{file.name}</td>
                       <td className="px-4 py-2">
-                        <a
-                          href={URL.createObjectURL(file)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center gap-1"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View
+                        <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                          <Eye className="w-4 h-4" /> View
                         </a>
                       </td>
                       <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleDelete(index)}
-                          className="text-red-500 hover:text-red-700"
-                        >
+                        <button onClick={() => handleDelete(index)} className="text-red-500 hover:text-red-700">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
@@ -360,25 +298,18 @@ const QuotationPage = () => {
 
         <hr className="border-t border-blue-500" />
 
-        {/* Quote Amount */}
+        {/* Quote Amount Footer */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="w-full md:w-auto">
             <label htmlFor="quoteAmount" className="block mb-1 text-xl font-medium text-gray-800">Quote Amount*</label>
-            <input
-              id="quoteAmount"
-              type="text"
-              className="w-full border border-gray-300 px-10 py-2 rounded-xl transition-all duration-300 focus:outline-none focus:border-blue-500 hover:border-blue-500"
-            />
+            <input id="quoteAmount" type="text" className="w-full border border-gray-300 px-10 py-2 rounded-xl transition-all duration-300 focus:outline-none focus:border-blue-500 hover:border-blue-500" />
           </div>
           <div className="flex gap-4 ml-auto">
-            <button className="border-2 border-blue-500 px-7 py-3 rounded-3xl hover:bg-blue-100 transition">
-              Discard
-            </button>
-            <button className="bg-blue-500 px-7 py-3 rounded-3xl text-white hover:bg-blue-600 transition">
-              Place Bid
-            </button>
+            <button className="border-2 border-blue-500 px-7 py-3 rounded-3xl hover:bg-blue-100 transition">Discard</button>
+            <button className="bg-blue-500 px-7 py-3 rounded-3xl text-white hover:bg-blue-600 transition">Place Bid</button>
           </div>
         </div>
+
       </div>
     </div>
   );
