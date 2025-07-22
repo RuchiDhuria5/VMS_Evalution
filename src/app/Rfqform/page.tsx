@@ -232,8 +232,6 @@ const QuotationPage = () => {
           </div>
         </div>
 
-        <hr className="border-t border-blue-500" />
-
         {/* Payment Section */}
         <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
           <div className="flex flex-col gap-1 w-full">
@@ -245,8 +243,6 @@ const QuotationPage = () => {
             <Input label="Validity End" type="date" placeholder="" />
           </div>
         </div>
-
-        <hr className="border-t border-blue-500" />
 
         {/* File Upload Section */}
         <div className="space-y-4 border border-gray-300 p-6 rounded-2xl">
