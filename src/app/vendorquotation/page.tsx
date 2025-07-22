@@ -143,7 +143,7 @@ const QuotationPage = () => {
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <h2 className="text-2xl font-bold text-gray-800">RFQ Data</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Quotation</h2>
           <div className="flex gap-3">
             <button className="bg-blue-500 text-white px-7 py-3 rounded-full hover:bg-blue-600 transition">Download PDF</button>
             <button className="border border-blue-500 px-7 py-3 rounded-full hover:bg-blue-100 transition">Back</button>
@@ -162,7 +162,7 @@ const QuotationPage = () => {
 
         {/* RFQ Details */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">RFQ Details</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Quotation</h3>
           <div className="border border-gray-300 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {logisticFields.map((label, i) => <Field key={i} label={label} />)}
             <div className="flex flex-col text-xs gap-1 min-w-[150px]">
@@ -182,9 +182,9 @@ const QuotationPage = () => {
 
         <hr className="border-t border-blue-500" />
 
-        {/* Vendor Details */}
+        {/* Details to be fill by vendor */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">Vendor Details</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Details to be fill by vendor</h3>
           <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               <Input label="Rate" placeholder="Enter rate" value={vendorForm.Rate} onChange={(e) => handleVendorChange("Rate", e.target.value)} />
@@ -232,14 +232,49 @@ const QuotationPage = () => {
 
         {/* Payment Section */}
         <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="payterms" className="text-sm font-medium text-gray-700">Payterms</label>
-            <input type="text" id="payterms" name="payterms" placeholder="Enter pay terms" className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition" />
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <div className="w-full sm:w-1/2">
+              <label htmlFor="payterms" className="text-sm font-medium text-gray-700">Payterms</label>
+              <input 
+                type="text" 
+                id="payterms" 
+                name="payterms" 
+                placeholder="Enter pay terms" 
+                className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition" 
+              />
+            </div>
+            <div className="flex flex-col gap-2 mt-5 px-3">
+              <div className="flex items-center gap-2">
+                <input 
+                  type="radio" 
+                  id="negotiable" 
+                  name="paymentTerms" 
+                  className="accent-blue-500" 
+                />
+                <label htmlFor="negotiable">Negotiable</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input 
+                  type="radio" 
+                  id="non-negotiable" 
+                  name="paymentTerms" 
+                  className="accent-blue-500" 
+                />
+                <label htmlFor="non-negotiable">Non-Negotiable</label>
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Validity Start" type="date" placeholder="" />
             <Input label="Validity End" type="date" placeholder="" />
           </div>
+          <div className="w-full sm:w-1/2">
+              <label htmlFor="payterms" className="text-sm font-medium text-gray-700">Tax</label>
+              <input 
+                type="text" 
+                className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition" 
+              />
+            </div>
         </div>
 
         {/* File Upload Section */}
