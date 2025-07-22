@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export default function SupplierEvaluationForm() {
   const evaluationTable = [
@@ -11,6 +11,12 @@ export default function SupplierEvaluationForm() {
   ];
 
   const [selectedIndices, setSelectedIndices] = useState(Array(5).fill(-1));
+  const [preparedSignature, setPreparedSignature] = useState("");
+  const [approvedSignature, setApprovedSignature] = useState("");
+  const preparedCanvasRef = useRef(null);
+  const approvedCanvasRef = useRef(null);
+  const [isDrawingPrepared, setIsDrawingPrepared] = useState(false);
+  const [isDrawingApproved, setIsDrawingApproved] = useState(false);
 
   const handleSelection = (col, rowIndex) => {
     const updated = [...selectedIndices];
@@ -24,7 +30,7 @@ export default function SupplierEvaluationForm() {
   };
 
   const totalScore = [0, 1, 2, 3, 4].reduce((sum, col) => sum + getScore(col), 0);
-  const grade = selectedIndices.includes(-1) ? "" : totalScore >= 70 ? "Grade-A" : totalScore >= 41 ? "Grade-B" : "Grade-C";
+  const grade = totalScore === 0 ? "" : totalScore >= 70 ? "Grade-A" : totalScore >= 41 ? "Grade-B" : "Grade-C";
 
   const parameters = [
     "Quality of Items",
@@ -33,6 +39,53 @@ export default function SupplierEvaluationForm() {
     "Price",
     "Quantity Commitment",
   ];
+
+  const startDrawing = (e, canvasRef, setIsDrawing) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    setIsDrawing(true);
+  };
+
+  const draw = (e, canvasRef, isDrawing, setIsDrawing) => {
+    if (!isDrawing) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+  };
+
+  const stopDrawing = (setIsDrawing) => {
+    setIsDrawing(false);
+  };
+
+  const saveSignature = (canvasRef, setSignature) => {
+    const canvas = canvasRef.current;
+    setSignature(canvas.toDataURL());
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const clearSignature = (canvasRef, setSignature) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setSignature("");
+  };
+
+  useEffect(() => {
+    const preparedCanvas = preparedCanvasRef.current;
+    const approvedCanvas = approvedCanvasRef.current;
+    const preparedCtx = preparedCanvas.getContext("2d");
+    const approvedCtx = approvedCanvas.getContext("2d");
+    preparedCtx.strokeStyle = "black";
+    preparedCtx.lineWidth = 2;
+    approvedCtx.strokeStyle = "black";
+    approvedCtx.lineWidth = 2;
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-gray-800 font-sans py-10 px-4">
@@ -62,27 +115,65 @@ export default function SupplierEvaluationForm() {
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-blue-800 mb-4">Supplier Details</h2>
           <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block font-medium mb-1">Supplier Name</label>
-              <input type="text" placeholder="Enter Supplier Name" className="w-full p-2 border rounded-md" />
+            <div className="space-y-4">
+              <div>
+                <label className="block font-medium mb-1">Supplier Name</label>
+                <input type="text" placeholder="Enter Supplier Name" className="w-full p-2 border rounded-md" />
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Product Supplied</label>
+                <input type="text" placeholder="Enter Product Name" className="w-full p-2 border rounded-md" />
+              </div>
             </div>
-            <div>
-              <label className="block font-medium mb-1">Product Supplied</label>
-              <input type="text" placeholder="Enter Product Name" className="w-full p-2 border rounded-md" />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Period (From)</label>
-              <input type="date" className="w-full p-2 border rounded-md" />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Period (To)</label>
-              <input type="date" className="w-full p-2 border rounded-md" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block font-medium mb-1">Quantity Supplied</label>
-              <input type="text" placeholder="Enter Quantity Supplied" className="w-full p-2 border rounded-md" />
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="w-1/2">
+                  <label className="block font-medium mb-1">Period (From)</label>
+                  <input type="date" className="w-full p-2 border rounded-md" />
+                </div>
+                <div className="w-1/2">
+                  <label className="block font-medium mb-1">Period (To)</label>
+                  <input type="date" className="w-full p-2 border rounded-md" />
+                </div>
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Quantity Supplied</label>
+                <input type="text" placeholder="Enter Quantity Supplied" className="w-full p-2 border rounded-md" />
+              </div>
             </div>
           </form>
+        </div>
+
+        {/* Summary Table */}
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full text-sm border border-gray-300">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr>
+                <th className="border p-2 text-left">Parameters</th>
+                <th className="border p-2 text-center">Individual Score Obtained</th>
+                <th className="border p-2 text-center">Total Score</th>
+                <th className="border p-2 text-center">Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              {parameters.map((param, index) => (
+                <tr key={index}>
+                  <td className="border p-2">{param}</td>
+                  <td className="border p-2 text-center">{getScore(index)}</td>
+                  {index === 0 && (
+                    <>
+                      <td className="border p-2 text-center font-semibold" rowSpan={parameters.length}>
+                        {totalScore}
+                      </td>
+                      <td className="border p-2 text-center font-semibold" rowSpan={parameters.length}>
+                        {grade || ""}
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Grade Criteria */}
@@ -96,7 +187,7 @@ export default function SupplierEvaluationForm() {
         </div>
 
         {/* Evaluation Table */}
-        <div className="overflow-x-auto mb-10"> 
+        <div className="overflow-x-auto mb-10">
           <table className="w-full text-sm border border-gray-300 text-center">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
@@ -140,51 +231,74 @@ export default function SupplierEvaluationForm() {
           </table>
         </div>
 
-        {/* Summary Table */}
-        <div className="overflow-x-auto mb-8">
-          <table className="w-full text-sm border border-gray-300">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="border p-2 text-left">Parameters</th>
-                <th className="border p-2 text-center">Individual Score Obtained</th>
-                <th className="border p-2 text-center">Total Score</th>
-                <th className="border p-2 text-center">Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {parameters.map((param, index) => (
-                <tr key={index}>
-                  <td className="border p-2">{param}</td>
-                  <td className="border p-2 text-center">{getScore(index)}</td>
-                  {index === 0 && (
-                    <>
-                      <td className="border p-2 text-center font-semibold" rowSpan={parameters.length}>
-                        {totalScore}
-                      </td>
-                      <td className="border p-2 text-center font-semibold" rowSpan={parameters.length}>
-                            {grade || ""}
-                      </td>
-                    </>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+        {/* Signature Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-12 gap-10 px-4">
-        <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/2">
             <label className="block font-semibold mb-1">Prepared By:</label>
             <input type="text" placeholder="Enter Name" className="w-full p-2 border rounded-md mb-2" />
+            <label className="block font-medium mb-1">Signature:</label>
+            <canvas
+              ref={preparedCanvasRef}
+              width={400}
+              height={100}
+              className="border border-gray-300 rounded-md mb-2"
+              onMouseDown={(e) => startDrawing(e, preparedCanvasRef, setIsDrawingPrepared)}
+              onMouseMove={(e) => draw(e, preparedCanvasRef, isDrawingPrepared, setIsDrawingPrepared)}
+              onMouseUp={() => stopDrawing(setIsDrawingPrepared)}
+              onMouseOut={() => stopDrawing(setIsDrawingPrepared)}
+            />
+            <div className="flex gap-2 mb-2">
+              <button
+                type="button"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                onClick={() => saveSignature(preparedCanvasRef, setPreparedSignature)}
+              >
+                Save 
+              </button>
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={() => clearSignature(preparedCanvasRef, setPreparedSignature)}
+              >
+                Clear
+              </button>
+            </div>
             <label className="block font-medium mb-1">Date:</label>
             <input type="date" className="w-full p-2 border rounded-md" />
-        </div>
-        <div className="w-full md:w-1/2">
+          </div>
+          <div className="w-full md:w-1/2">
             <label className="block font-semibold mb-1">Approved By:</label>
             <input type="text" placeholder="Enter Name" className="w-full p-2 border rounded-md mb-2" />
+            <label className="block font-medium mb-1">Signature:</label>
+            <canvas
+              ref={approvedCanvasRef}
+              width={400}
+              height={100}
+              className="border border-gray-300 rounded-md mb-2"
+              onMouseDown={(e) => startDrawing(e, approvedCanvasRef, setIsDrawingApproved)}
+              onMouseMove={(e) => draw(e, approvedCanvasRef, isDrawingApproved, setIsDrawingApproved)}
+              onMouseUp={() => stopDrawing(setIsDrawingApproved)}
+              onMouseOut={() => stopDrawing(setIsDrawingApproved)}
+            />
+            <div className="flex gap-2 mb-2">
+              <button
+                type="button"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                onClick={() => saveSignature(approvedCanvasRef, setApprovedSignature)}
+              >
+                Save 
+              </button>
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={() => clearSignature(approvedCanvasRef, setApprovedSignature)}
+              >
+                Clear
+              </button>
+            </div>
             <label className="block font-medium mb-1">Date:</label>
             <input type="date" className="w-full p-2 border rounded-md" />
-        </div>
+          </div>
         </div>
       </div>
     </div>
