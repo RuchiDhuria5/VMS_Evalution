@@ -160,8 +160,6 @@ const QuotationPage = () => {
           </div>
         </div>
 
-        <hr className="border-t border-blue-500" />
-
         {/* RFQ Details */}
         <div>
           <h3 className="text-xl font-semibold text-gray-800 mb-4">RFQ Details</h3>
