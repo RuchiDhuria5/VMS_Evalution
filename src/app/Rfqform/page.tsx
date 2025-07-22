@@ -189,10 +189,10 @@ const QuotationPage = () => {
           <h3 className="text-xl font-semibold text-gray-800 mb-4">Vendor Details</h3>
           <div className="border border-gray-300 rounded-2xl p-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <Textarea label="Material Desc" placeholder="Enter material description" value={vendorForm.materialDesc} onChange={(e) => handleVendorChange("materialDesc", e.target.value)} />
+              <Input label="Rate" placeholder="Enter rate" value={vendorForm.Rate} onChange={(e) => handleVendorChange("Rate", e.target.value)} />
               <Input label="Lead Time" placeholder="Enter lead time" value={vendorForm.leadTime} onChange={(e) => handleVendorChange("leadTime", e.target.value)} />
               <Input label="Delivery" type="date" placeholder="Select delivery date" value={vendorForm.delivery} onChange={(e) => handleVendorChange("delivery", e.target.value)} />
-              <Input label="Rate" placeholder="Enter rate" value={vendorForm.Rate} onChange={(e) => handleVendorChange("Rate", e.target.value)} />
+              <Textarea label="Material Desc" placeholder="Enter material description" value={vendorForm.materialDesc} onChange={(e) => handleVendorChange("materialDesc", e.target.value)} />
             </div>
             <button onClick={addVendor} className="bg-blue-500 text-white px-6 py-2 rounded-2xl hover:bg-blue-600">Add</button>
             {vendorWarning && <p className="text-red-600 text-sm">{vendorWarning}</p>}
