@@ -240,12 +240,6 @@ const QuotationPage = () => {
             <label htmlFor="payterms" className="text-sm font-medium text-gray-700">Payterms</label>
             <input type="text" id="payterms" name="payterms" placeholder="Enter pay terms" className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition" />
           </div>
-          <div className="flex items-center gap-4">
-            <input type="radio" id="negotiable" name="paymentTerms" className="accent-blue-500" />
-            <label htmlFor="negotiable">Negotiable</label>
-            <input type="radio" id="non-negotiable" name="paymentTerms" className="accent-blue-500" />
-            <label htmlFor="non-negotiable">Non-Negotiable</label>
-          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Validity Start" type="date" placeholder="" />
             <Input label="Validity End" type="date" placeholder="" />
