@@ -7,7 +7,7 @@ const Field = ({ label }: { label: string }) => (
   <div className="flex flex-col text-xs gap-1 min-w-[150px]">
     <span className="text-gray-600">{label}</span>
     <div className="border border-gray-300 rounded-xl px-3 py-1.5 bg-gray-50 text-sm">
-      no value
+      {/*no value*/}
     </div>
   </div>
 );
@@ -244,10 +244,10 @@ const QuotationPage = () => {
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="w-full md:w-auto">
             <label htmlFor="quoteAmount" className="block mb-1 text-xl font-medium text-gray-800">Quote Amount*</label>
-            <input
+             <input
               id="quoteAmount"
-              type="text"
-              className="w-full border border-gray-300 px-10 py-2 rounded-xl transition-all duration-300 focus:outline-none focus:border-blue-500 hover:border-blue-500"
+              type="number"
+              className="w-full border border-gray-300 px-2 py-2 rounded-xl transition-all duration-300 focus:outline-none focus:border-blue-500 hover:border-blue-500"
             />
           </div>
           <div className="flex gap-4 ml-auto">
