@@ -365,7 +365,7 @@ const QuotationPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 w-full">
             <div className="w-full sm:w-1/2">
               <label htmlFor="payterms" className="text-sm font-medium text-gray-700">
-                Payterms
+                Pay terms
               </label>
               <input
                 type="text"
