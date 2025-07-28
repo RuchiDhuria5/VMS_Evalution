@@ -171,14 +171,10 @@ const QuotationPage = () => {
     setSelectedFile(null);
     setVendorWarning("");
 
-    const input = document.getElementById("fileInput") as HTMLInputElement;
-    if (input) input.value = "";
-  };
+    
 
-  const handleTaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d]/g, "");
-    setTax(value ? `${value}%` : "");
-  };
+  
+};
     // Read-only field
     const Field = ({ label }: { label: string }) => (
       <div className="flex flex-col text-xs gap-1 min-w-[150px]">
@@ -396,12 +392,21 @@ const QuotationPage = () => {
           <div className="w-full sm:w-1/2">
             <label htmlFor="tax" className="text-sm font-medium text-gray-700">Tax (%)</label>
             <input
-              id="tax"
               type="text"
-              value={tax}
-              onChange={handleTaxChange}
-              placeholder="Enter tax"
+              placeholder="Enter Tax"
               className="border border-gray-300 w-full py-2.5 px-4 rounded-2xl focus:outline-none focus:border-blue-500 hover:border-blue-500 transition"
+              onChange={(e) => {
+                const value = e.target.value;
+                // Remove non-numeric characters except for the % symbol
+                const cleanedValue = value.replace(/[^0-9.%]/g, '');
+                // Ensure only one % symbol is allowed at the end
+                const validValue = cleanedValue.replace(/%+/, '%').replace(/%$/, '') + (cleanedValue.includes('%') ? '%' : '');
+                e.target.value = validValue;
+
+                // Parse the numeric value (remove % for calculations)
+                const numericValue = parseFloat(value.replace('%', ''));
+                console.log('Parsed value:', numericValue); // Use this value for calculations
+              }}
             />
           </div>
         </div>
